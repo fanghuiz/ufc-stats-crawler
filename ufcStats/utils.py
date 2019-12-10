@@ -1,4 +1,9 @@
-def get_element_att(stat, element):
+import datetime
+import re
+from dateparser import parse
+
+
+def get_element_atk(stat, element):
     f1_att = stat[0].split('of')[1].strip()
     f1_land = stat[0].split('of')[0].strip()
     f2_att = stat[1].split('of')[1].strip()
@@ -26,3 +31,17 @@ def get_element_dmg(stat, element):
         f2_def = int(f1_att) - int(f1_land)
         element = list([f1_def, f2_def])
     return element
+
+
+def IS_Active(last_fight_date):
+    """
+    Returns True if last fight date is less than 365 days from 
+    the date data lst fetched
+    """
+    last_fight_date_delta = parse('today') - parse(last_fight_date)
+    return last_fight_date_delta < datetime.timedelta(days=365)
+
+
+def print_time(time):
+    time = parse(time).replace(microsecond=0).isoformat().replace(':', '-')
+    return time
