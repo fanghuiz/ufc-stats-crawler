@@ -1,4 +1,6 @@
 # Project
+data/
+log/
 prototype/
 .DS_Store
 .vscode/
