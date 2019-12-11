@@ -6,7 +6,7 @@ from ..utils import *
 
 class FightsSpider(scrapy.Spider):
     name = 'ufcFights'
-    start_urls = ['http://ufcstats.com/statistics/events/completed']
+    start_urls = ['http://ufcstats.com/statistics/events/completed?page=all']
 
     custom_settings = {
         'ITEM_PIPELINES': {
@@ -55,15 +55,28 @@ class FightsSpider(scrapy.Spider):
 
         status = response.css(
             '.b-fight-details__person-status ::text').getall()
-        names = response.css('.b-fight-details__person-name a::text').getall()
-        ids = response.css(
-            '.b-fight-details__person-name ::attr(href)').getall()
 
-        fighter_1 = names[0].strip()
-        fighter_2 = names[1].strip()
-        fighter_1_id = ids[0].split('/')[-1]
-        fighter_2_id = ids[1].split('/')[-1]
+        # Fighter names
+        names = response.css(
+            '.b-fight-details__person-name :not(p)::text').getall()
+        try:
+            fighter_1 = names[0].strip()
+            fighter_2 = names[1].strip()
+        except:
+            fighter_1 = None
+            fighter_2 = None
 
+        # IDs - Handle errors due to missing fighter link
+        ids = response.css('.b-fight-details__person-name')
+        fighter_1_id = ids[0].css('::attr(href)').get()
+        fighter_2_id = ids[1].css('::attr(href)').get()
+        if fighter_1_id is not None:
+            fighter_1_id = fighter_1_id.split('/')[-1]
+
+        if fighter_2_id is not None:
+            fighter_2_id = fighter_2_id.split('/')[-1]
+
+        # Winner name
         if status[0].strip() == 'W':
             winner = fighter_1
         elif status[1].strip() == 'W':
@@ -109,46 +122,57 @@ class FightsSpider(scrapy.Spider):
                     fight_duration_lastrnd_time.strip())
 
         ##### Fighter Stats ######
-        fighter_status = response.css(
-            '.b-fight-details__person-status ::text').getall()
-        fighter_status = [i.strip() for i in fighter_status]
-
-        fighter_id = response.css(
-            '.b-fight-details__person-name ::attr(href)').getall()
-        fighter_id = [i.split('/')[-1] for i in fighter_id]
+        fighter_status = [i.strip() for i in status]
+        fighter_id = list([fighter_1_id, fighter_2_id])
+        fighter_name = list([fighter_1, fighter_2])
 
         stats = response.css('table:not(.js-fight-table)')
-        stats_total = stats[0].css(
-            '.b-fight-details__table-body .b-fight-details__table-col')
-        stats_str = stats[1].css(
-            '.b-fight-details__table-body .b-fight-details__table-col')
+        
+        # Fight stats - handle missing values 
+        if len(stats) == 2:
+            stats_total = stats[0].css(
+                '.b-fight-details__table-body .b-fight-details__table-col')
+            stats_str = stats[1].css(
+                '.b-fight-details__table-body .b-fight-details__table-col')
 
-        fighter_name = stats_total[0].css('a ::text').getall()
+            ## Totals
+            kd = stats_total[1].css('p ::text').getall()
+            kd = [int(i.strip()) for i in kd]
 
-        ## Totals
-        kd = stats_total[1].css('p ::text').getall()
-        kd = [int(i.strip()) for i in kd]
+            sig_str = stats_total[2].css('p ::text').getall()
+            total_str = stats_total[4].css('p ::text').getall()
+            td = stats_total[5].css('p ::text').getall()
 
-        sig_str = stats_total[2].css('p ::text').getall()
-        total_str = stats_total[4].css('p ::text').getall()
-        td = stats_total[5].css('p ::text').getall()
+            n_sub = stats_total[7].css('p ::text').getall()
+            n_sub = [int(i.strip()) for i in n_sub]
 
-        n_sub = stats_total[7].css('p ::text').getall()
-        n_sub = [int(i.strip()) for i in n_sub]
+            n_pass = stats_total[8].css('p ::text').getall()
+            n_pass = [int(i.strip()) for i in n_pass]
 
-        n_pass = stats_total[8].css('p ::text').getall()
-        n_pass = [int(i.strip()) for i in n_pass]
+            n_rev = stats_total[9].css('p ::text').getall()
+            n_rev = [int(i.strip()) for i in n_rev]
 
-        n_rev = stats_total[9].css('p ::text').getall()
-        n_rev = [int(i.strip()) for i in n_rev]
-
-        ## Significant strikes
-        head = stats_str[3].css('p ::text').getall()
-        body = stats_str[4].css('p ::text').getall()
-        leg = stats_str[5].css('p ::text').getall()
-        distance = stats_str[6].css('p ::text').getall()
-        clinch = stats_str[7].css('p ::text').getall()
-        ground = stats_str[8].css('p ::text').getall()
+            ## Significant strikes
+            head = stats_str[3].css('p ::text').getall()
+            body = stats_str[4].css('p ::text').getall()
+            leg = stats_str[5].css('p ::text').getall()
+            distance = stats_str[6].css('p ::text').getall()
+            clinch = stats_str[7].css('p ::text').getall()
+            ground = stats_str[8].css('p ::text').getall()
+        else:
+            kd = None
+            sig_str = None
+            total_str = None
+            td = None
+            n_sub = None
+            n_pass = None
+            n_rev = None
+            head = None
+            body = None
+            leg = None
+            distance = None
+            clinch = None
+            ground = None
 
         #l.add_value('fight_id', fight_id)
         l.add_value('fighter_id', fighter_id)
