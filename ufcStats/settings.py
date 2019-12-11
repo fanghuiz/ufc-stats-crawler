@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from .utils import print_time
+
 # Scrapy settings for ufcStats project
 #
 # For simplicity, this file contains only settings considered important or
@@ -14,7 +16,6 @@ BOT_NAME = 'ufcStats'
 SPIDER_MODULES = ['ufcStats.spiders']
 NEWSPIDER_MODULE = 'ufcStats.spiders'
 
-
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'ufcStats (+http://www.yourdomain.com)'
 
@@ -27,13 +28,13 @@ ROBOTSTXT_OBEY = True
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 0.5
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-#COOKIES_ENABLED = False
+COOKIES_ENABLED = False
 
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
@@ -88,3 +89,8 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+log_time = print_time('now')
+
+LOG_FILE = f'log/{log_time}.log'
+LOG_LEVEL = "INFO"
