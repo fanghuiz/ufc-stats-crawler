@@ -5,139 +5,58 @@
 - [About](#about)
 - [Getting Started](#getting_started)
 - [Usage](#usage)
-- [Contributing](../CONTRIBUTING.md)
-
-
-## Data Structure
-
-Fighter stats
-
-- fighter_id
-- name
-- height
-- weight
-- reach
-- stance
-- dob
-- weightclass
-- active
-- fight_time_total
-- fight_time_avg
-- n_win
-- n_loss
-- n_draw
-- Sig_Str_land_pM - Significant Strikes Landed per Minute
-- Sig_Str_land_pct - Significant Striking Accuracy (% landed)
-- Sig_Str_abs_pM - Significant Strikes Absorbed per Minute
-- Sig_Str_def_pct - Significant Strike Defence (the % of opponents strikes that did not land)
-- TD_Avg - Average Takedowns Landed per 15 minutes
-- TD_land_pct - Takedown Accuracy
-- TD_def_pct - Takedown Defense (the % of opponents TD attempts that did not land)
-- Sub_Avg - Average Submissions Attempted per 15 minutes
-
-Fighter performance
-
-- fighter_id
-- fight_id
-- date
-- outcome - Win/Loss/Draw
-- KD - Knockdown landed
-- Sig_Str_att - Significant strikes attempted
-- Sig_Str_land - Significant strikes landed
-- Sig_Str_land_pct - % Significant strikes landed
-- Str_att - Strikes attempted
-- Str_land - Strikes landed
-- Str_land_pct - % Strikes landed
-- TD_att - Takedowns attempted
-- TD_land - Takedowns landed
-- TD_land_pct - % Takedowns landed
-- Sub_att - Submissions attempted
-- Pass
-- Rev
-- Head_att - Significant strikes attempted to Head
-- Head_land - Significant strikes landed to Head
-- Body_att - Significant strikes attempted to Body
-- Body_land - Significant strikes landed to Body
-- Leg_att - Significant strikes attempted to Leg
-- Leg_land - Significant strikes landed to Leg
-- Distance_att - Significant strikes attempted from Distance
-- Distance_land - Significant strikes landed from Distance
-- Clinch_att - Significant strikes attempted from Clinch
-- Clinch_land - Significant strikes landed from Clinch
-- Ground_att - Significant strikes attempted from Ground
-- Ground_land - Significant strikes landed from Ground
-- Sig_Str_abs - Significant strikes absorbed (opponent's strikes landed)
-- Sig_Str_def - Significant strikes defended (opponent's strikes did not land)
-- Str_abs - Strikes absorbed
-- Str_def - Strikes defended
-- TD_abs - Takedowns absorbed
-- TD_def - Takedowns defended
-- Head_abs
-- Head_def
-- Body_abs
-- Body_def
-- Leg_abs
-- Leg_def
-- Distance_abs
-- Distance_def
-- Clinch_abs
-- Clinch_def
-- Ground_abs
-- Ground_def
-
-Fights
-
-- fight_id
-- date
-- location
-- fighter_1
-- fighter_1_id
-- fighter_2
-- fighter_2_id
-- winner
-- weight_class
-- title_bout
-- decision_method
-- time_format
-- fight_duration_lastrnd
-- fight_duration_lastrnd_time
-
-
+- [TODO](#to_do)
 
 ## About <a name = "about"></a>
 
-Write about 1-2 paragraphs describing the purpose of your project.
+This is a web scraper to get data of all completed UFC fights from [UFC Stats](http://ufcstats.com/), built using [Scrapy](https://github.com/scrapy/scrapy). Scraped data are organized into 3 tables:
+
+- `fight_info` <a name = "fight_info"></a> table, contains fight/match-up level meta-data.
+- `fighter_stats`<a name = "fighter_stats"></a> table, contains fighter level data of fighters' career summary statistics.
+- `fight_stats` <a name="fight_stats"></a> contains fighter-level performance data within each match-up.
 
 ## Getting Started <a name = "getting_started"></a>
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
-
 ### Prerequisites
 
-What things you need to install the software and how to install them.
+You will need to install Scrapy and all relevant dependencies.
+
+The quick way:
 
 ```
-Give examples
+pip install scrapy
 ```
+
+See the install section in the documentation at https://docs.scrapy.org/en/latest/intro/install.html for more details.
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running.
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo.
+Clone or fork the repo. Or download a local copy. Then crawl away.
 
 ## Usage <a name = "usage"></a>
 
-Add notes about how to use the system.
+Call `scrapy crawl spider_name` to start the crawler. There are two spiders you can run:
+
+```
+scrapy crawl ufcFights
+```
+
+The `ufcFights` spider will return
+
+- [`fight_info`](#fight_info) table as a `.csv` file saved in `data/fight_info` directory.
+- [`fight_stats`](#fight_stats) table as `.jl` file (newline-delimited JSON) saved in `data/fight_stats` directory. One line per fight.
+
+```
+scrapy crawl ufcFighters
+```
+
+The `ufcFighters` spider will return the [`fighter_stats`](#fighter_stats) table as a `.csv` file saved in `data/fighter_stats` directory.
+
+All output files use timestamp as file names.
+
+_Note: in the current version, running the spider will crawl the entire site, so it will take some time._
+
+## TODO <a name = "to_do"></a>
+
+- [ ] Add a spider to scrape upcoming fights
+- [ ] Add options to limit the spider's scope, e.g. only scrape the new matches rather than the entire site.
