@@ -78,6 +78,17 @@ class FightsItem(scrapy.Item):
     ground_def = scrapy.Field()
 
 
+class UpcomingFightsItem(scrapy.Item):
+    fight_id = scrapy.Field(output_processor=TakeFirst())
+    date = scrapy.Field(output_processor=TakeFirst())
+    location = scrapy.Field(output_processor=TakeFirst())
+    fighter_1 = scrapy.Field(output_processor=TakeFirst())
+    fighter_1_id = scrapy.Field(output_processor=TakeFirst())
+    fighter_2 = scrapy.Field(output_processor=TakeFirst())
+    fighter_2_id = scrapy.Field(output_processor=TakeFirst())
+    weight_class = scrapy.Field(output_processor=TakeFirst())
+
+
 class FighterSummaryItem(scrapy.Item):
     # define the fields for your item here like:
     fighter_id = scrapy.Field(output_processor=TakeFirst())

@@ -8,7 +8,7 @@
 from scrapy.exporters import JsonLinesItemExporter, CsvItemExporter
 import pathlib
 
-from .utils import print_time
+from ufcStats.utils import print_time
 
 fields_fight_info = [
     'fight_id', 'fighter_1', 'fighter_1_id', 'fighter_2', 'fighter_2_id',
