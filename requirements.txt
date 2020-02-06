@@ -1,0 +1,2 @@
+dateparser==0.7.2
+Scrapy==1.7.4
