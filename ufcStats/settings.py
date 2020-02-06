@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import pathlib
 from .utils import print_time
 
 # Scrapy settings for ufcStats project
@@ -91,6 +92,8 @@ COOKIES_ENABLED = False
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 log_time = print_time('now')
+path_log = "log"
+pathlib.Path(path_log).mkdir(parents=True, exist_ok=True)
 
-LOG_FILE = f'log/{log_time}.log'
+LOG_FILE = f'{path_log}/{log_time}.log'
 LOG_LEVEL = "INFO"
