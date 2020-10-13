@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - [About](#about)
+- [Building and Running with Docker](#docker)
 - [Getting Started](#getting_started)
 - [Usage](#usage)
 - [TODO](#to_do)
@@ -15,18 +16,27 @@ All completed UFC fights:
 
 - `fight_info` <a name = "fight_info"></a> table, contains fight/match-up level meta-data.
 - `fighter_stats`<a name = "fighter_stats"></a> table, contains fighter level data of fighters' career summary statistics.
-- `fight_stats` <a name="fight_stats"></a> contains fighter-level performance data within each match-up. 
+- `fight_stats` <a name="fight_stats"></a> contains fighter-level performance data within each match-up.
 
 Upcoming fights:
 
-- `upcoming`<a name = "upcoming"></a> table contains match-up level information of all the upcoming fights in the next UFC event, according to this page http://ufcstats.com/statistics/events/completed. 
+- `upcoming`<a name = "upcoming"></a> table contains match-up level information of all the upcoming fights in the next UFC event, according to this page http://ufcstats.com/statistics/events/completed.
 
 Let me know if you've used the crawler or data to make something cool :wave:
+
+## Building and Running with Docker <a name = "docker"></a>
+Logs will be written to standard output in json format.
+
+```
+make build       # Builds the docker container
+make ufcFights   # Run the ufcFights crawler
+make ufcFighters # Run the ufcFighters crawler
+make upcoming    # Run the upcoming crawler
+```
 
 ## Getting Started <a name = "getting_started"></a>
 
 ### Prerequisites
-
 * Python 3
 * Scrapy
 
